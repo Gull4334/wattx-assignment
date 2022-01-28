@@ -1,0 +1,2 @@
+# wattx-assignment
+Cryoto assets
