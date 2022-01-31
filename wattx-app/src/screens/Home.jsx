@@ -1,11 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { getAllCurrencies } from '../apis/api';
 import ReactEcharts from "echarts-for-react";
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { ActionCreator } from '../state/actions';
+
 
 const Home = () => {
 
     const [currencies, setCurrencies] = useState([]);
     const [marketCapArray, setMarketCapArray] = useState([]);
+    const myReduxData = useSelector((state) => state.data);
+
+    // if (myReduxData.allCurrencies) {
+    //     setCurrencies(myReduxData.allCurrencies);
+    //     setMarketCapArray(myReduxData.marketCapArray);
+    // }
+
+    const dispatch = useDispatch();
+    const { UpdateData } = bindActionCreators(ActionCreator, dispatch);
 
     useEffect(() => {
 
@@ -28,9 +42,7 @@ const Home = () => {
                 capArray.push(currency.quote.USD.market_cap);
             });
         }
-        setCurrencies(dataArray);
-        setMarketCapArray(capArray);
-
+        UpdateData({allCurrencies: dataArray, marketCapArray: capArray});
     }, []);
 
     const optionsEchart = {

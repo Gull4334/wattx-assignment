@@ -7,15 +7,19 @@ import {
 } from "react-router-dom";
 
 import Home from './screens/Home';
+import { Provider } from 'react-redux';
+import { store } from './state/store';
 
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-        </Routes>
-      </BrowserRouter>
+      <Provider store={store} >
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />} />
+          </Routes>
+        </BrowserRouter>
+      </Provider>
     </div>
   );
 }
