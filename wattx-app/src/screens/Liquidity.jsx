@@ -4,11 +4,12 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { ActionCreator } from '../state/actions';
+import {Container, Box, Select,MenuItem} from '@mui/material';
 
 
 const Liquidity = () => {
     const myReduxData = useSelector((state) => state.data);
-    const [currenciesToShow, setCurrenciesToShow] = useState('All');
+    const [currenciesToShow, setCurrenciesToShow] = useState();
 
     const dispatch = useDispatch();
     const { UpdateData } = bindActionCreators(ActionCreator, dispatch);
@@ -45,15 +46,16 @@ const Liquidity = () => {
     };
 
     const changeNumberOfCurrencies = (e) => {
-        setCurrenciesToShow(e.currentTarget.value);
-        if (e.currentTarget.value === '50') {
+        
+        setCurrenciesToShow(e.target.value);
+        if (e.target.value === '50') {
             UpdateData({ 
                 ...myReduxData, 
                 showCurrencies: myReduxData.allCurrencies.slice(0, 50),
                 showMarketCap: myReduxData.allMarketCap.slice(0, 50)
              });
         }
-        else if (e.currentTarget.value === '10') {
+        else if (e.target.value === '10') {
             UpdateData({ 
                 ...myReduxData, 
                 showCurrencies: myReduxData.allCurrencies.slice(0, 10),
@@ -68,19 +70,18 @@ const Liquidity = () => {
              });
         }
     }
-
     return (
-        <div>
-            <div>
-                <select onChange={(e) => changeNumberOfCurrencies(e)} value={currenciesToShow}>
-                    <option value='All'>All</option>
-                    <option value='10'>10</option>
-                    <option value='50'>50</option>
-                </select>
-            </div>
+        <Container maxWidth="md">
+            <Box>
+            <Select label="Age" onChange={(e) => changeNumberOfCurrencies(e)} value={currenciesToShow}>
+                    <MenuItem value='All'>Show All</MenuItem>
+                    <MenuItem value='10'>Show 10</MenuItem>
+                    <MenuItem value='50'>Show 50</MenuItem>
+                </Select>
             
             <ReactEcharts option={optionsEchart} />
-        </div>
+            </Box>
+        </Container>
     )
 }
 
