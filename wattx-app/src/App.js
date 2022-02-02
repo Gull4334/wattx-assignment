@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 
 import Home from './screens/Home';
+import Liquidity from './screens/Liquidity';
 import { Provider } from 'react-redux';
 import { store } from './state/store';
 
@@ -17,6 +18,7 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/Liquidity" element={<Liquidity />} />
           </Routes>
         </BrowserRouter>
       </Provider>

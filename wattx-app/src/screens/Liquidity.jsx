@@ -1,16 +1,48 @@
 import React, { useState } from 'react';
+import ReactEcharts from "echarts-for-react";
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { ActionCreator } from '../state/actions';
 
 
-const Home = () => {
+const Liquidity = () => {
     const myReduxData = useSelector((state) => state.data);
     const [currenciesToShow, setCurrenciesToShow] = useState('All');
 
     const dispatch = useDispatch();
     const { UpdateData } = bindActionCreators(ActionCreator, dispatch);
+
+    const optionsEchart = {
+        xAxis: {
+            data: myReduxData.showMarketCap ? myReduxData.showMarketCap : []
+        },
+        yAxis: {
+            type: 'value'
+        },
+
+        series: [
+            {
+                name: 'Price',
+                radius: '55%',
+                center: ['50%', '60%'],
+                data: myReduxData.showCurrencies ? myReduxData.showCurrencies : [],
+                type: 'scatter',
+                areaStyle: {}
+            }
+        ],
+        tooltip: {
+            trigger: 'item',
+            formatter: function (params) {
+                return `
+          ${params.name}<br />
+          Cap: ${params.data.market_cap}<br />
+          Volume: ${params.data.value}<br />
+          Price: ${params.data.price}<br />
+          `;
+            }
+        },
+    };
 
     const changeNumberOfCurrencies = (e) => {
         setCurrenciesToShow(e.currentTarget.value);
@@ -46,32 +78,10 @@ const Home = () => {
                     <option value='50'>50</option>
                 </select>
             </div>
-            <div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Rank</th>
-                            <th>Name</th>
-                            <th>Price</th>
-                            <th>Cap</th>
-                            <th>Vol</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {myReduxData.showCurrencies && myReduxData.showCurrencies.map((currency, currencyIndex) => (
-                            <tr>
-                                <td>{currencyIndex + 1}</td>
-                                <td>{currency.name}</td>
-                                <td>{currency.price}</td>
-                                <td>{currency.market_cap}</td>
-                                <td>{currency.value}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>            
+            
+            <ReactEcharts option={optionsEchart} />
         </div>
     )
 }
 
-export default Home;
+export default Liquidity;
